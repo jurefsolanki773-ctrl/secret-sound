@@ -4,16 +4,135 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Secret Sound</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #050505;
+      color: #d4af37;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .box {
+      width: 90%;
+      max-width: 380px;
+      padding: 35px 25px;
+      border: 1px solid #d4af37;
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(212,175,55,.25);
+    }
+
+    h1 {
+      font-size: 28px;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      margin: 20px 0 12px;
+      background: #111;
+      color: white;
+      border: 1px solid #d4af37;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 17px;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      background: #d4af37;
+      color: black;
+      border: none;
+      border-radius: 10px;
+      font-size: 17px;
+      font-weight: bold;
+    }
+
+    #start {
+      position: fixed;
+      inset: 0;
+      background: #050505;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    #start button {
+      width: 80%;
+      max-width: 320px;
+    }
+
+    #message {
+      margin-top: 15px;
+    }
+  </style>
 </head>
+
 <body>
 
-  <h1>Secret Sound 🎵</h1>
+  <div id="start">
+    <button onclick="startSound()">👆 TAP ANYWHERE TO START</button>
+  </div>
 
-  <audio controls>
-    <source src="sound.mp3" type="audio/mpeg">
-    Your browser does not support audio.
-  </audio>
+  <div class="box">
+    <h1>🔐 Secret Sound</h1>
+    <p>Enter the code to stop the sound</p>
+
+    <input
+      type="text"
+      id="code"
+      placeholder="Enter code"
+      autocomplete="off"
+    >
+
+    <button onclick="checkCode()">UNLOCK 🔓</button>
+
+    <div id="message"></div>
+
+    <audio id="sound" loop>
+      <source src="sound.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+
+  <script>
+    const FIXED_CODE = "LINDDI";
+    const sound = document.getElementById("sound");
+
+    function startSound() {
+      document.getElementById("start").style.display = "none";
+
+      sound.play().catch(() => {
+        document.getElementById("start").style.display = "flex";
+      });
+    }
+
+    function checkCode() {
+      const entered =
+        document.getElementById("code").value.trim().toUpperCase();
+
+      if (entered === FIXED_CODE) {
+        sound.pause();
+        sound.currentTime = 0;
+
+        document.getElementById("message").textContent =
+          "✅ Correct code! Sound stopped.";
+      } else {
+        document.getElementById("message").textContent =
+          "❌ Wrong code!";
+      }
+    }
+  </script>
 
 </body>
 </html>
-
